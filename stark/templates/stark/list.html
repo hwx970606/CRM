@@ -1,0 +1,102 @@
+{% extends 'layout.html' %}
+
+{% block css %}
+    <style>
+        .search {
+            width: 250px;
+
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="luffy-container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-lg-12 col-xs-12">
+                {% if search_group_row_list %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span style="font-size: 15px"><i class="fa fa-share-alt"
+                                                             aria-hidden="true"></i>&nbsp;组合搜索</span>
+                        </div>
+                        <div class="panel-body">
+                            {% for row in search_group_row_list %}
+                                <div style="margin-bottom: 5px" class="">
+                                    {% for item in row %}
+                                        <div style="margin-right: 5px;margin-bottom: 5px;display: inline-block">{{ item|safe }}</div>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+                {% endif %}
+
+                {% if search_list %}
+                    <form action="">
+                        <div class='search pull-right' style="margin-right: 5px">
+                            <div class="input-group">
+
+                                <input type="text" class="form-control" placeholder="请输入搜索条件." name="query"
+                                       value="{{ search_val }}">
+                                <span class="input-group-btn">
+                                <button class="btn btn-primary" type="submit"><i class="fa fa-search"
+                                                                                 aria-hidden="true"></i></button>
+                              </span>
+                            </div><!-- /input-group -->
+                        </div><!-- /.col-lg-6 -->
+                    </form>
+                {% endif %}
+                <!-- Single button -->
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {% if action_dict %}
+                        <div class="btn-group form-inline pull-left" style="margin:5px 10px 0 0">
+                            <label for="active"></label>
+                            <select name="active" id="active" class="form-control">
+                                <option value="">请选择批量操作</option>
+                                {% for func,func_name in action_dict.items %}
+                                    <option value="{{ func }}">{{ func_name }}</option>
+                                {% endfor %}
+                            </select>
+                            <input type="submit" value="执行" class="btn btn-primary pull-right" style="margin-left: 5px">
+                        </div>
+                    {% endif %}
+
+                    {% if add_btn %}
+                        <div style="margin:5px 10px 5px 0" class="pull-left">
+                            {{ add_btn|safe }}
+                        </div>
+                    {% endif %}
+
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            {% for row in header_list %}
+                                <th>{{ row }}</th>
+                            {% endfor %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for row in body_list %}
+                            <tr>
+
+                                {% for td in row %}
+                                    <td>{{ td }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </form>
+                <nav>
+                    <ul class="pagination">
+                        {{ pager.page_html|safe }}
+                    </ul>
+                </nav>
+            </div>
+
+        </div>
+
+{% endblock %}

@@ -1,0 +1,163 @@
+{% extends 'rbac/layout.html' %}
+{% load rbac %}
+{% block css %}
+    <style>
+        .active {
+            border-left: 3px solid #f0ad4e;
+            border-radius: 5px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="luffy-container">
+        <div class="row">
+            <div class="col-md-3 ">
+                <div class="bs-example" data-example-id="table-within-panel">
+                    <div class="panel panel-default ">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading clearfix">
+                            <i class="fa fa-book"></i>&nbsp;<strong>一级菜单</strong>
+                            <a href="{% memory_url request 'rbac:menu_add'%}" class="btn btn-success pull-right "><i
+                                    class="fa fa-pencil"></i>&nbsp;新增</a>
+                        </div>
+
+                        <!-- Table -->
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>名称</th>
+                                <th>图标</th>
+                                <th>选项</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for menu in menus %}
+                                <tr class="{% if menu.id == menu_id %}active{% endif %}">
+                                    <th scope="row">{{ forloop.counter }}</th>
+                                    <td><a href="?mid={{ menu.id }}">{{ menu.title }}</a></td>
+                                    <td><i class="{{ menu.icon }}"></i></td>
+                                    <td>
+                                        <a href="{% memory_url request 'rbac:menu_edit' menu.id %}"><i
+                                                class="fa fa-edit"></i></a>
+                                        |
+                                        <a href="{% memory_url request 'rbac:menu_del' menu.id %}" style="color: red"><i
+                                                class="fa fa-minus-square"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                {% if request.GET %}
+                    <div class="bs-example" data-example-id="table-within-panel">
+                        <div class="panel panel-default ">
+                            <!-- Default panel contents -->
+                            <div class="panel-heading clearfix">
+                                <i class="fa fa-code"></i>&nbsp;<strong>二级菜单</strong>
+                                <a href="{% memory_url request 'rbac:second_menu_add' num=menu_id %}"
+                                   class="btn btn-success pull-right "><i class="fa fa-pencil"></i>&nbsp;新增</a>
+                            </div>
+
+                            <!-- Table -->
+
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>名称</th>
+                                    <th>CODE&URL</th>
+                                    <th>选项</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for second in second_menu %}
+                                    <tr class="{% if sid == second.id %}active{% endif %}">
+                                        <th><a href="?mid={{ menu_id }}&sid={{ second.id }}">{{ second.title }}</a></th>
+                                        <th>
+                                            {{ second.name }}
+                                            <br>
+                                            <br>
+                                            {{ second.url }}
+                                        </th>
+                                        <th>
+                                            <a href="{% memory_url request 'rbac:second_menu_edit' num=second.id %}"><i class="fa fa-edit"></i></a>
+                                            |
+                                            <a href="{% memory_url request 'rbac:second_menu_del' num=second.id %}" style="color: red"><i class="fa fa-minus-square"></i></a>
+                                        </th>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {% endif %}
+
+
+            </div>
+            <div class="col-lg-5">
+                {% if request.GET %}
+                    <div class="bs-example" data-example-id="table-within-panel">
+                        <div class="panel panel-default ">
+                            <!-- Default panel contents -->
+                            <div class="panel-heading clearfix">
+                                <i class="fa fa-bars"></i>&nbsp;<strong>权限菜单</strong>
+                                {% if sid %}
+                                <a href="{% memory_url request 'rbac:permission_add' second_id=sid %}" class="btn btn-success pull-right "><i class="fa fa-pencil"></i>&nbsp;新增</a>
+                                {% endif %}
+                                <a href="{% url 'rbac:multi_permission' %}" class="btn btn-primary pull-right">批量操作</a>
+
+                            </div>
+
+                            <!-- Table -->
+
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>名称</th>
+                                    <th>CODE&URL</th>
+                                    <th>选项</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for permission in permission_list %}
+                                    <tr>
+                                        <th>{{ permission.title }}</th>
+                                        <th>
+                                            {{ permission.name }}
+                                            <br>
+                                            <br>
+                                            {{ permission.url }}
+                                        </th>
+                                        <th>
+                                            <a href="{% memory_url request 'rbac:permission_edit' second_id=permission.id %}"><i class="fa fa-edit"></i></a>
+                                            |
+                                            <a href="{% memory_url request 'rbac:permission_del' second_id=permission.id %}" style="color: red"><i class="fa fa-minus-square"></i></a>
+                                        </th>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {% endif %}
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+{% endblock %}
